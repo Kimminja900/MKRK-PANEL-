@@ -1,0 +1,261 @@
+const html = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>MKRK PANEL</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: #000;
+      font-family: sans-serif;
+      height: 100vh;
+      overflow: hidden;
+    }
+    #container {
+      display: flex;
+      width: 300vw;
+      height: 100vh;
+      transition: transform 0.5s ease;
+    }
+    .panel {
+      border: 2px solid #a200ff;
+      border-radius: 15px;
+      padding: 30px 25px;
+      background-color: #111;
+      text-align: center;
+      width: 85vw;
+      max-width: 400px;
+      box-shadow: 0 0 20px #a200ff33;
+      margin: auto;
+      height: auto;
+    }
+    .page {
+      width: 100vw;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .title {
+      color: white;
+      font-size: 24px;
+      margin-bottom: 20px;
+      font-weight: bold;
+    }
+    input[type="password"] {
+      padding: 12px;
+      width: 100%;
+      font-size: 16px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      background-color: #222;
+      color: #fff;
+    }
+    button {
+      background-color: #a200ff;
+      color: white;
+      font-weight: bold;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      width: 100%;
+      font-size: 16px;
+      cursor: pointer;
+      margin-bottom: 15px;
+    }
+    button:active {
+      opacity: 0.8;
+    }
+    .unlock-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #222;
+      padding: 15px 20px;
+      margin-bottom: 12px;
+      border-radius: 8px;
+      width: 100%;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+      color: white;
+      font-weight: 600;
+      font-size: 18px;
+    }
+    .unlock-row button {
+      width: 90px;
+      margin: 0;
+      font-size: 16px;
+      padding: 10px;
+    }
+    #confirmButton {
+      max-width: 400px;
+      margin: 20px auto 0 auto;
+      display: none;
+      background-color: #0f0;
+      color: #000;
+      font-weight: 700;
+    }
+    #message {
+      color: #0f0;
+      text-align: center;
+      margin-top: 12px;
+      font-weight: 600;
+    }
+    #fifaiButtons {
+      display: flex;
+      flex-direction: column;
+      max-width: 400px;
+      margin: auto;
+    }
+    #fifaiButtons button {
+      background-color: #a200ff;
+      margin-bottom: 15px;
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <div class="page">
+      <div class="panel">
+        <div class="title">MKRK PANEL</div>
+        <input type="password" id="password" placeholder="รหัสผ่าน" />
+        <button id="btnLogin">ยืนยัน</button>
+        <div id="errorMsg" style="color:#f33; margin-top:10px;"></div>
+      </div>
+    </div>
+    <div class="page">
+      <div>
+        <div class="unlock-row">
+          <span>ล็อก 90%</span>
+          <button id="btn90">เปิด</button>
+        </div>
+        <div class="unlock-row">
+          <span>ล็อก 100%</span>
+          <button id="btn100">เปิด</button>
+        </div>
+        <div class="unlock-row">
+          <span>ล็อก 120%</span>
+          <button id="btn120">เปิด</button>
+        </div>
+        <button id="confirmButton">ยืนยัน</button>
+        <div id="message"></div>
+      </div>
+    </div>
+  )<div class="page">
+      <div>
+        <div class="unlock-row">
+          <span>ล็อก 90%</span>
+          <button id="btn90">เปิด</button>
+        </div>
+        <div class="unlock-row">
+          <span>ล็อก 100%</span>
+          <button id="btn100">เปิด</button>
+        </div>
+        <div class="unlock-row">
+          <span>ล็อก 120%</span>
+          <button id="btn120">เปิด</button>
+        </div>
+        <button id="confirmButton">ยืนยัน</button>
+        <div id="message"></div>
+      </div>
+    </div>
+    <div class="page">
+      <div class="panel" style="max-width:400px;">
+        <div class="title">เลือกโหมดฟีฟาย</div>
+        <div id="fifaiButtons">
+          <button id="btnFifai1">ฟีฟาย</button>
+          <button id="btnFifai2">ฟีฟายแม็กกี้</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    const container = document.getElementById('container');
+    const btnLogin = document.getElementById('btnLogin');
+    const errorMsg = document.getElementById('errorMsg');
+    const btnUnlocks = {
+      "90%": document.getElementById('btn90'),
+      "100%": document.getElementById('btn100'),
+      "120%": document.getElementById('btn120')
+    };
+    const confirmButton = document.getElementById('confirmButton');
+    const message = document.getElementById('message');
+    let selectedUnlock = null;
+
+    function goToPage(index) {
+      container.style.transform = 'translateX(' + (-index * 100) + 'vw)';
+    }
+
+    btnLogin.onclick = () => {
+      const pwd = document.getElementById('password').value;
+      if (pwd === 'MKRK!') {
+        errorMsg.textContent = '';
+        goToPage(1);
+      } else {
+        errorMsg.textContent = ' รหัสไม่ถูกต้อง โปรดลองใหม่อีกครั้ง';
+      }
+    };
+
+    function resetUnlockButtons() {
+      selectedUnlock = null;
+      confirmButton.style.display = 'none';
+      message.textContent = '';
+      Object.values(btnUnlocks).forEach(btn => btn.disabled = false);
+    }
+
+    Object.entries(btnUnlocks).forEach(([level, btn]) => {
+      btn.onclick = () => {
+        resetUnlockButtons();
+        selectedUnlock = level;
+        btn.disabled = true;
+        confirmButton.style.display = 'block';
+      };
+    });
+
+    confirmButton.onclick = () => {
+      if (!selectedUnlock) return;
+      message.textContent = ' เปิดล็อก ' + selectedUnlock + ' เรียบร้อยแล้ว';
+      setTimeout(() => {
+        goToPage(2);
+      }, 1200);
+    };
+
+    document.getElementById('btnFifai1').onclick = () => {
+      window.webkit.messageHandlers.scriptable.postMessage('fifai');
+    };
+    document.getElementById('btnFifai2').onclick = () => {
+      window.webkit.messageHandlers.scriptable.postMessage('fifaimaggie');
+    };
+  </script>
+</body>
+</html>
+;
+
+let wv = new WebView();
+await wv.loadHTML(html, "about:blank");
+await wv.present(false);
+
+let choice = await wv.evaluateJavaScript(
+  new Promise(resolve => {
+    window.webkit = window.webkit  {};
+    window.webkit.messageHandlers = window.webkit.messageHandlers  {};
+    window.webkit.messageHandlers.scriptable = {
+      postMessage: (msg) => resolve(msg)
+    }
+  });
+`, true);
+
+if (choice === 'fifai') {
+  Safari.open('https://firegame.example/fifai');
+} else if (choice === 'fifaimaggie') {
+  Safari.open('https://firegame.example/fifaimaggie');
+} else {
+  let fail = new Alert();
+  fail.title = " ไม่มีการเลือกโหมดฟีฟาย";
+  fail.message = "โปรดลองใหม่อีกครั้ง";
+  fail.addAction("ตกลง");
+  await fail.present(); 
+}
